@@ -102,7 +102,8 @@ public interface KieBpmSystemConstants {
     public final static String API_DELETE_CASE_FILE = "API_DELETE_CASE_FILE";
     public final static String API_GET_PROCESS_INSTANCE = "API_GET_PROCESS_INSTANCE";
     
-    
+
+    public final static String API_GET_DMN_MODEL = "API_GET_DMN_MODEL";
     
 
     public static final String WIDGET_PARAM_DATA_TYPE_CODE = "dataTypeCode";

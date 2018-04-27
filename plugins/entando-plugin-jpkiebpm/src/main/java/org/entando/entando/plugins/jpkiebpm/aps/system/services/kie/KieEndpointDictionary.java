@@ -26,22 +26,45 @@ package org.entando.entando.plugins.jpkiebpm.aps.system.services.kie;
 import java.util.HashMap;
 
 import org.apache.http.HttpStatus;
-
-import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_CONTAINERS_LIST;
-import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_HUMAN_TASK_LIST;
-import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_PROCESS_DEFINITIONS_LIST;
-import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_PROCESS_INSTANCES_LIST;
-import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_PROCESS_DEFINITION;
-import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_PROCESS_DIAGRAM;
-import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_POST_PROCESS_START;
-import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_DATA_HUMAN_TASK;
-import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_TASK_FORM_DEFINITION;
-import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_PUT_HUMAN_TASK;
-
 import org.entando.entando.plugins.jprestapi.aps.core.Endpoint;
 import org.entando.entando.plugins.jprestapi.aps.core.IEndpoint;
 
-import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.*;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_DELETE_CASE_FILE;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_DELETE_COMMENTS;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_DELETE_PROCESS;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_DELETE_ROLE;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_ALL_PROCESS_INSTANCES_LIST;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_ALL_TASK_LIST_ADMIN;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_CASES_DEFINITIONS;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_CASES_DETAILS;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_CASES_LIST;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_CASE_FILE;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_COMMENTS_LIST;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_CONTAINERS_LIST;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_DATA_HUMAN_TASK;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_DATA_HUMAN_TASK_DETAIL;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_DMN_MODEL;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_HUMAN_TASK_LIST;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_MILESTONES_LIST;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_PROCESS_DEFINITION;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_PROCESS_DEFINITIONS_LIST;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_PROCESS_DIAGRAM;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_PROCESS_INSTANCE;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_PROCESS_INSTANCES_LIST;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_ROLE;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_SERVER_STATUS;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_GET_TASK_FORM_DEFINITION;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_POST_ALL_PROCESS_INSTANCES_W_CLIENT_DATA;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_POST_CASE_FILE;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_POST_COMMENTS;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_POST_PROCESS_START;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_POST_SIGNAL;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_PUT_COMPLETE_ENRICHMENT_DOCUMENT_APPROVAL_TASK;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_PUT_HUMAN_TASK;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_PUT_HUMAN_TASK_STATE;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_PUT_ROLE;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_PUT_SET_TASK_STATE;
+import static org.entando.entando.plugins.jpkiebpm.aps.system.KieBpmSystemConstants.API_PUT_UPDATE_COMMENTS;;
 
 /**
  * @author Entando
@@ -94,6 +117,8 @@ public class KieEndpointDictionary {
         
         endpoints.put(API_PUT_COMPLETE_ENRICHMENT_DOCUMENT_APPROVAL_TASK, new Endpoint(IEndpoint.httpVerb.PUT, "/services/rest/server/containers/%s/tasks/%s/states/%s", HttpStatus.SC_CREATED, true));
         // /services/rest/server/containers/%s/tasks/%s/states/%s?user=legalWorker&auto-progress=true
+
+        endpoints.put(API_GET_DMN_MODEL, new Endpoint(IEndpoint.httpVerb.GET, "/services/rest/server/containers/%s/dmn", HttpStatus.SC_OK, true)); //credit-dispute-decisions_1.0-SNAPSHOT
 
 
     }
