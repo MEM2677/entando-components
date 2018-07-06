@@ -201,6 +201,13 @@
                     <p class="sr-only">
                         <a class="sr-only" href="#quickmenu" id="<s:property value="#lang.code" />_tab_quickmenu"><s:text name="note.goBackToQuickMenu" /></a>
                     </p>
+                    
+                    <wpsa:hookPoint key="jacms.entryContent.langElement" objectName="hookPointElements_jacms_entryContent_langElement">
+                        <s:iterator value="#hookPointElements_jacms_entryContent_langElement" var="hookPointElement">
+                            <wpsa:include value="%{#hookPointElement.filePath}"></wpsa:include>
+                        </s:iterator>
+                    </wpsa:hookPoint>
+                    
                     <s:iterator value="content.attributeList" var="attribute"><%-- attributes iterator --%>
                         <div id="<s:property value="%{'contentedit_'+#lang.code+'_'+#attribute.name}" />"><%-- contentedit div --%>
                             <wpsa:tracerFactory var="attributeTracer" lang="%{#lang.code}" /><%-- tracer init --%>
