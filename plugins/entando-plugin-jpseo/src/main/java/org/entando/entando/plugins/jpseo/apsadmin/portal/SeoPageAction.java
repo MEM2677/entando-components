@@ -29,7 +29,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.entando.entando.plugins.jpseo.aps.system.services.metatag.IMetatagCatalogue;
 import org.entando.entando.plugins.jpseo.aps.system.services.metatag.Metatag;
-import org.entando.entando.plugins.jpseo.aps.system.services.page.PageMetatag;
+import org.entando.entando.plugins.jpseo.aps.system.services.mapping.ObjectMetatag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +49,7 @@ public class SeoPageAction extends PageAction {
     public String addMetatag() {
         try {
             this.extractAndSetOtherParams();
-            Map<String, Map<String, PageMetatag>> seoParameters = SeoPageActionUtils.extractSeoParameters(this.getRequest());
+            Map<String, Map<String, ObjectMetatag>> seoParameters = SeoPageActionUtils.extractSeoParameters(this.getRequest());
             String key = this.getMetatagKey();
             boolean hasError = false;
             Metatag metatag = (!StringUtils.isBlank(key)) ? this.getMetatagCatalogue().getCatalogue().get(key) : null;
@@ -67,12 +67,12 @@ public class SeoPageAction extends PageAction {
                 while (langsIter.hasNext()) {
                     Lang lang = langsIter.next();
                     String valueToSet = (lang.isDefault()) ? value : null; 
-                    PageMetatag pageMetatag = new PageMetatag(lang.getCode(), key, valueToSet);
+                    ObjectMetatag pageMetatag = new ObjectMetatag(lang.getCode(), key, valueToSet);
                     pageMetatag.setUseDefaultLangValue(!lang.isDefault());
                     if (null != metatag) {
                         pageMetatag.setKeyAttribute(metatag.getAttributeKey());
                     }
-                    Map<String, PageMetatag> langMetatag = seoParameters.get(lang.getCode());
+                    Map<String, ObjectMetatag> langMetatag = seoParameters.get(lang.getCode());
                     if (null == langMetatag) {
                         langMetatag = new HashMap<>();
                         seoParameters.put(lang.getCode(), langMetatag);
@@ -91,7 +91,7 @@ public class SeoPageAction extends PageAction {
     public String removeMetatag() {
         try {
             this.extractAndSetOtherParams();
-            Map<String, Map<String, PageMetatag>> seoParameters = SeoPageActionUtils.extractSeoParameters(this.getRequest());
+            Map<String, Map<String, ObjectMetatag>> seoParameters = SeoPageActionUtils.extractSeoParameters(this.getRequest());
             String metaKey = this.getMetatagKey();
             if (!StringUtils.isBlank(metaKey) && null != seoParameters) {
                 seoParameters.values().stream().forEach(langMap -> langMap.remove(metaKey));

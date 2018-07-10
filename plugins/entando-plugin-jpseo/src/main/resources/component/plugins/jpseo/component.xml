@@ -14,6 +14,7 @@
 		<tableMapping>
 			<datasource name="portDataSource">
 				<class>org.entando.entando.plugins.jpseo.aps.system.init.portdb.FriendlyCode</class>
+				<class>org.entando.entando.plugins.jpseo.aps.system.init.portdb.ContentExtraParameters</class>
 			</datasource>
 		</tableMapping>
 		<environment code="production">

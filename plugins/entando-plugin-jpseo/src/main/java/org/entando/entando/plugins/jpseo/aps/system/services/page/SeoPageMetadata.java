@@ -21,17 +21,19 @@
  */
 package org.entando.entando.plugins.jpseo.aps.system.services.page;
 
+import org.entando.entando.plugins.jpseo.aps.system.services.mapping.ObjectMetatag;
 import java.util.Map;
 
 import com.agiletec.aps.system.services.page.PageMetadata;
 import com.agiletec.aps.util.ApsProperties;
+import org.entando.entando.plugins.jpseo.aps.system.services.mapping.IObjectMetadata;
 
 /**
  * This is the representation of a portal page metadata
  *
  * @author E.Santoboni
  */
-public class SeoPageMetadata extends PageMetadata {
+public class SeoPageMetadata extends PageMetadata implements IObjectMetadata {
 
     private ApsProperties descriptions = new ApsProperties();
     private ApsProperties keywords = new ApsProperties();
@@ -39,24 +41,29 @@ public class SeoPageMetadata extends PageMetadata {
 
     private String friendlyCode;
 
-    private Map<String, Map<String, PageMetatag>> complexParameters;
+    private Map<String, Map<String, ObjectMetatag>> complexParameters;
 
+    @Override
     public String getDescription(String langCode) {
         return this.getDescriptions().getProperty(langCode);
     }
 
+    @Override
     public ApsProperties getDescriptions() {
         return descriptions;
     }
 
+    @Override
     public void setDescriptions(ApsProperties descriptions) {
         this.descriptions = descriptions;
     }
 
+    @Override
     public ApsProperties getKeywords() {
         return keywords;
     }
 
+    @Override
     public void setKeywords(ApsProperties keywords) {
         this.keywords = keywords;
     }
@@ -77,11 +84,13 @@ public class SeoPageMetadata extends PageMetadata {
         this.friendlyCode = friendlyCode;
     }
 
-    public Map<String, Map<String, PageMetatag>> getComplexParameters() {
+    @Override
+    public Map<String, Map<String, ObjectMetatag>> getComplexParameters() {
         return complexParameters;
     }
 
-    public void setComplexParameters(Map<String, Map<String, PageMetatag>> complexParameters) {
+    @Override
+    public void setComplexParameters(Map<String, Map<String, ObjectMetatag>> complexParameters) {
         this.complexParameters = complexParameters;
     }
 

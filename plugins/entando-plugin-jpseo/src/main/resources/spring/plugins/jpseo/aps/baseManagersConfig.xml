@@ -52,4 +52,13 @@
 		<property name="defsFilePath"><value>/WEB-INF/plugins/jpseo/seoAttributeRoles.xml</value></property>
 	</bean>
     
+	<bean id="jpseoContentExtraParametersManager" class="org.entando.entando.plugins.jpseo.aps.system.services.content.ContentExtraParametersManager"
+		parent="abstractService">
+		<property name="contentExtraParametersDAO">
+            <bean class="org.entando.entando.plugins.jpseo.aps.system.services.content.ContentExtraParametersDAO">
+                <property name="dataSource" ref="portDataSource" />
+            </bean>
+        </property>
+	</bean>
+    
 </beans>

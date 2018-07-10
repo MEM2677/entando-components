@@ -39,9 +39,9 @@ import javax.servlet.jsp.JspException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.taglibs.standard.tag.common.core.OutSupport;
 import org.entando.entando.plugins.jpseo.aps.system.JpseoSystemConstants;
+import org.entando.entando.plugins.jpseo.aps.system.services.mapping.ExtraConfigDOMUtil;
 import org.entando.entando.plugins.jpseo.aps.system.services.metatag.Metatag;
-import org.entando.entando.plugins.jpseo.aps.system.services.page.PageMetatag;
-import org.entando.entando.plugins.jpseo.aps.system.services.page.SeoPageExtraConfigDOM;
+import org.entando.entando.plugins.jpseo.aps.system.services.mapping.ObjectMetatag;
 import org.entando.entando.plugins.jpseo.aps.system.services.page.SeoPageMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,17 +89,17 @@ public class SeoMetatagsTag extends OutSupport {
                 keywords = ((SeoPageMetadata) pageMetadata).getKeywords().getProperty(defaultLang.getCode());
             }
             this.appendMetadata(output, Metatag.ATTRIBUTE_NAME_NAME, "keywords", keywords);
-            Map<String, Map<String, PageMetatag>> complexParameters = ((SeoPageMetadata) pageMetadata).getComplexParameters();
+            Map<String, Map<String, ObjectMetatag>> complexParameters = ((SeoPageMetadata) pageMetadata).getComplexParameters();
             if (null != complexParameters) {
-                Map<String, Map<String, PageMetatag>> metas = SeoPageExtraConfigDOM.extractRightParams(complexParameters, defaultLang);
-                Map<String, PageMetatag> defaultMap = metas.get(defaultLang.getCode());
-                Map<String, PageMetatag> langMap = (currentLang.getCode().equals(defaultLang.getCode())) ? null : metas.get(currentLang.getCode());
+                Map<String, Map<String, ObjectMetatag>> metas = ExtraConfigDOMUtil.extractRightParams(complexParameters, defaultLang);
+                Map<String, ObjectMetatag> defaultMap = metas.get(defaultLang.getCode());
+                Map<String, ObjectMetatag> langMap = (currentLang.getCode().equals(defaultLang.getCode())) ? null : metas.get(currentLang.getCode());
                 if (null != defaultMap) {
-                    Iterator<PageMetatag> iter = defaultMap.values().iterator();
+                    Iterator<ObjectMetatag> iter = defaultMap.values().iterator();
                     while (iter.hasNext()) {
-                        PageMetatag defaultMetatag = iter.next();
-                        PageMetatag metatag = (null != langMap) ? langMap.get(defaultMetatag.getKey()) : null;
-                        PageMetatag current = (null != metatag && !metatag.isUseDefaultLangValue()) ? metatag : defaultMetatag;
+                        ObjectMetatag defaultMetatag = iter.next();
+                        ObjectMetatag metatag = (null != langMap) ? langMap.get(defaultMetatag.getKey()) : null;
+                        ObjectMetatag current = (null != metatag && !metatag.isUseDefaultLangValue()) ? metatag : defaultMetatag;
                         this.appendMetadata(output, current);
                     }
                 }
@@ -135,7 +135,7 @@ public class SeoMetatagsTag extends OutSupport {
         }
     }
     
-    protected void appendMetadata(StringBuilder output, PageMetatag metatag) {
+    protected void appendMetadata(StringBuilder output, ObjectMetatag metatag) {
         this.appendMetadata(output, metatag.getKeyAttribute(), metatag.getKey(), metatag.getValue());
     }
     

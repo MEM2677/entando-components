@@ -44,10 +44,11 @@ import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.entando.entando.plugins.jpseo.aps.system.services.mapping.ExtraConfigDOMUtil;
 import org.entando.entando.plugins.jpseo.aps.system.services.mapping.FriendlyCodeVO;
 import org.entando.entando.plugins.jpseo.aps.system.services.mapping.ISeoMappingManager;
 import org.entando.entando.plugins.jpseo.aps.system.services.metatag.Metatag;
-import org.entando.entando.plugins.jpseo.aps.system.services.page.PageMetatag;
+import org.entando.entando.plugins.jpseo.aps.system.services.mapping.ObjectMetatag;
 import org.entando.entando.plugins.jpseo.aps.system.services.page.SeoPageExtraConfigDOM;
 import org.entando.entando.plugins.jpseo.aps.system.services.page.SeoPageMetadata;
 import org.slf4j.Logger;
@@ -103,7 +104,7 @@ public class PageActionAspect {
                 Iterator<Object> iter = props.keySet().iterator();
                 while (iter.hasNext()) {
                     String key = (String) iter.next();
-                    PageMetatag metatag = (PageMetatag) props.get(key);
+                    ObjectMetatag metatag = (ObjectMetatag) props.get(key);
                     request.setAttribute(PARAM_DESCRIPTION_PREFIX + key, metatag.getValue());
                     request.setAttribute(PARAM_DESCRIPTION_USE_DEFAULT_PREFIX + key, metatag.isUseDefaultLangValue());
                 }
@@ -113,15 +114,15 @@ public class PageActionAspect {
                 Iterator<Object> iter = keywords.keySet().iterator();
                 while (iter.hasNext()) {
                     String key = (String) iter.next();
-                    PageMetatag metatag = (PageMetatag) keywords.get(key);
+                    ObjectMetatag metatag = (ObjectMetatag) keywords.get(key);
                     request.setAttribute(PARAM_KEYWORDS_PREFIX + key, metatag.getValue());
                     request.setAttribute(PARAM_KEYWORDS_USE_DEFAULT_PREFIX + key, metatag.isUseDefaultLangValue());
                 }
             }
-            Map<String, Map<String, PageMetatag>> seoParameters = pageMetadata.getComplexParameters();
+            Map<String, Map<String, ObjectMetatag>> seoParameters = pageMetadata.getComplexParameters();
             if (null != seoParameters) {
                 Lang defaultLang = this.getLangManager().getDefaultLang();
-                Map<String, Map<String, PageMetatag>> metas = SeoPageExtraConfigDOM.extractRightParams(seoParameters, defaultLang);
+                Map<String, Map<String, ObjectMetatag>> metas = ExtraConfigDOMUtil.extractRightParams(seoParameters, defaultLang);
                 request.setAttribute(PARAM_METATAGS, metas);
             }
             request.setAttribute(PARAM_METATAG_ATTRIBUTE_NAMES, Metatag.getAttributeNames());
@@ -206,7 +207,7 @@ public class PageActionAspect {
             String titleKey = PARAM_DESCRIPTION_PREFIX + lang.getCode();
             String title = request.getParameter(titleKey);
             if (null != title) {
-                PageMetatag meta = new PageMetatag(lang.getCode(), "description", title.trim());
+                ObjectMetatag meta = new ObjectMetatag(lang.getCode(), "description", title.trim());
                 String useDefaultLangKey = PARAM_DESCRIPTION_USE_DEFAULT_PREFIX + lang.getCode();
                 String useDefaultLang = request.getParameter(useDefaultLangKey);
                 meta.setUseDefaultLangValue(!lang.isDefault() && Boolean.parseBoolean(useDefaultLang));
@@ -215,7 +216,7 @@ public class PageActionAspect {
             String keywordsKey = PARAM_KEYWORDS_PREFIX + lang.getCode();
             String keywords = request.getParameter(keywordsKey);
             if (null != keywords) {
-                PageMetatag meta = new PageMetatag(lang.getCode(), "keywords", keywords.trim());
+                ObjectMetatag meta = new ObjectMetatag(lang.getCode(), "keywords", keywords.trim());
                 String useDefaultLangKey = PARAM_KEYWORDS_USE_DEFAULT_PREFIX + lang.getCode();
                 String useDefaultLang = request.getParameter(useDefaultLangKey);
                 meta.setUseDefaultLangValue(!lang.isDefault() && Boolean.parseBoolean(useDefaultLang));

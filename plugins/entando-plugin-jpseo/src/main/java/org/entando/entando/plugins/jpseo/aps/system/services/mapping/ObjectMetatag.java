@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.entando.entando.plugins.jpseo.aps.system.services.page;
+package org.entando.entando.plugins.jpseo.aps.system.services.mapping;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -28,7 +28,7 @@ import org.entando.entando.plugins.jpseo.aps.system.services.metatag.Metatag;
 /**
  * @author E.Santoboni
  */
-public class PageMetatag {
+public class ObjectMetatag {
     
     private String keyAttribute = Metatag.ATTRIBUTE_NAME_NAME;
     private String key;
@@ -36,7 +36,7 @@ public class PageMetatag {
     private String langCode;
     private boolean useDefaultLangValue;
     
-    public PageMetatag(String langCode, String key, String value) {
+    public ObjectMetatag(String langCode, String key, String value) {
         this.setLangCode(langCode);
         this.setKey(key);
         this.setValue(value);
@@ -53,7 +53,7 @@ public class PageMetatag {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final PageMetatag other = (PageMetatag) obj;
+        final ObjectMetatag other = (ObjectMetatag) obj;
         if (!Objects.equals(this.keyAttribute, other.keyAttribute)) {
             return false;
         }

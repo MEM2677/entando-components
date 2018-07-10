@@ -9,5 +9,10 @@
 		<property name="langManager" ref="LangManager" />
 		<property name="seoMappingManager" ref="jpseoSeoMappingManager" />
 	</bean>
-
+    
+    <bean id="jpseoEntryContentLangElementHookPoint" class="com.agiletec.apsadmin.system.plugin.HookPointElementContainer" >
+		<property name="filePath"><value>/WEB-INF/plugins/jpseo/apsadmin/jsp/content/entryContentLang-jack.jsp</value></property>
+		<property name="hookPointKey"><value>jacms.entryContent.langElement</value></property>
+	</bean>
+    
 </beans>

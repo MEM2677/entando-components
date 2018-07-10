@@ -36,7 +36,7 @@ import com.agiletec.aps.system.services.page.IPageManager;
 import com.agiletec.aps.system.services.page.PageMetadata;
 import com.agiletec.aps.util.ApsProperties;
 import com.agiletec.aps.util.ApsWebApplicationUtils;
-import org.entando.entando.plugins.jpseo.aps.system.services.page.PageMetatag;
+import org.entando.entando.plugins.jpseo.aps.system.services.mapping.ObjectMetatag;
 import org.entando.entando.plugins.jpseo.aps.system.services.page.SeoPageMetadata;
 
 /**
@@ -103,17 +103,17 @@ public class PageInfoTag extends com.agiletec.aps.tags.PageInfoTag {
             return;
         }
         ApsProperties descriptions = ((SeoPageMetadata) pageMetadata).getDescriptions();
-        PageMetatag metatag = null;
+        ObjectMetatag metatag = null;
         if ((this.getLangCode() == null) || (this.getLangCode().equals(""))
                 || (currentLang.getCode().equalsIgnoreCase(this.getLangCode()))) {
-            metatag = (PageMetatag) descriptions.get(currentLang.getCode());
+            metatag = (ObjectMetatag) descriptions.get(currentLang.getCode());
         } else {
-            metatag = (PageMetatag) descriptions.get(this.getLangCode());
+            metatag = (ObjectMetatag) descriptions.get(this.getLangCode());
         }
         if (metatag == null || null == metatag.getValue()) {
             ILangManager langManager
                     = (ILangManager) ApsWebApplicationUtils.getBean(SystemConstants.LANGUAGE_MANAGER, this.pageContext);
-            metatag = (PageMetatag) descriptions.get(langManager.getDefaultLang().getCode());
+            metatag = (ObjectMetatag) descriptions.get(langManager.getDefaultLang().getCode());
         }
         if (null != metatag) {
             this.setValue(metatag.getValue());

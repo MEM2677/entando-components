@@ -36,7 +36,7 @@ import com.agiletec.aps.util.ApsProperties;
 import com.agiletec.apsadmin.system.ApsAdminSystemConstants;
 import com.agiletec.plugins.jacms.apsadmin.portal.PageAction;
 import com.opensymphony.xwork2.Action;
-import org.entando.entando.plugins.jpseo.aps.system.services.page.PageMetatag;
+import org.entando.entando.plugins.jpseo.aps.system.services.mapping.ObjectMetatag;
 import org.entando.entando.plugins.jpseo.aps.system.services.page.SeoPageMetadata;
 
 public class TestPageAction extends ApsAdminPluginBaseTestCase {
@@ -78,10 +78,10 @@ public class TestPageAction extends ApsAdminPluginBaseTestCase {
 		assertEquals("Seo Page 1", action.getTitles().getProperty("en"));
 		assertEquals("Pagina Seo 1", action.getTitles().getProperty("it"));
         
-        Map<String, Map<String, PageMetatag>> metas = (Map<String, Map<String, PageMetatag>>) this.getRequest().getAttribute(PageActionAspect.PARAM_METATAGS);
+        Map<String, Map<String, ObjectMetatag>> metas = (Map<String, Map<String, ObjectMetatag>>) this.getRequest().getAttribute(PageActionAspect.PARAM_METATAGS);
         assertNotNull(metas);
         assertEquals(3, metas.size());
-        Map<String, PageMetatag> engMetas = metas.get("en");
+        Map<String, ObjectMetatag> engMetas = metas.get("en");
         assertNotNull(engMetas);
         assertEquals(6, engMetas.size());
         assertNull(engMetas.get("key2").getValue());
@@ -206,10 +206,10 @@ public class TestPageAction extends ApsAdminPluginBaseTestCase {
             ApsProperties titles = addedSeoPage.getDescriptions();
             assertNotNull(titles);
             assertEquals(2, titles.size());
-            assertEquals("Descrizione SEO per LINGUA IT", ((PageMetatag) titles.get("it")).getValue());
-            assertEquals("Seo Description Lang EN", ((PageMetatag) titles.get("en")).getValue());
-            assertFalse(((PageMetatag) titles.get("it")).isUseDefaultLangValue());
-            assertTrue(((PageMetatag) titles.get("en")).isUseDefaultLangValue());
+            assertEquals("Descrizione SEO per LINGUA IT", ((ObjectMetatag) titles.get("it")).getValue());
+            assertEquals("Seo Description Lang EN", ((ObjectMetatag) titles.get("en")).getValue());
+            assertFalse(((ObjectMetatag) titles.get("it")).isUseDefaultLangValue());
+            assertTrue(((ObjectMetatag) titles.get("en")).isUseDefaultLangValue());
 		} catch (Throwable t) {
 			throw t;
 		} finally {
@@ -246,17 +246,17 @@ public class TestPageAction extends ApsAdminPluginBaseTestCase {
 			assertTrue(addedPage.getMetadata() instanceof SeoPageMetadata);
 			SeoPageMetadata addedSeoPage = (SeoPageMetadata) addedPage.getMetadata();
 			assertEquals("friendly_code_test_2", addedSeoPage.getFriendlyCode());
-            Map<String, Map<String, PageMetatag>> extraParams = addedSeoPage.getComplexParameters();
+            Map<String, Map<String, ObjectMetatag>> extraParams = addedSeoPage.getComplexParameters();
             assertEquals(2, extraParams.size());
             assertEquals(2, extraParams.get("it").size());
             assertEquals(2, extraParams.get("en").size());
-            PageMetatag metaIt0 = extraParams.get("it").get("metaKey_0");
+            ObjectMetatag metaIt0 = extraParams.get("it").get("metaKey_0");
             assertNotNull(metaIt0);
             assertEquals("meta value IT 0", metaIt0.getValue());
             assertEquals("name", metaIt0.getKeyAttribute());
             assertFalse(metaIt0.isUseDefaultLangValue());
             
-            PageMetatag metaEn1 = extraParams.get("en").get("metaKey_1");
+            ObjectMetatag metaEn1 = extraParams.get("en").get("metaKey_1");
             assertNotNull(metaEn1);
             assertEquals("meta value EN 1", metaEn1.getValue());
             assertEquals("property", metaEn1.getKeyAttribute());

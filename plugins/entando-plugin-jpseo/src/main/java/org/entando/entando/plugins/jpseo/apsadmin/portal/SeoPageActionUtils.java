@@ -32,15 +32,15 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.entando.entando.plugins.jpseo.aps.system.services.metatag.Metatag;
-import org.entando.entando.plugins.jpseo.aps.system.services.page.PageMetatag;
+import org.entando.entando.plugins.jpseo.aps.system.services.mapping.ObjectMetatag;
 
 public class SeoPageActionUtils {
     
-    protected static Map<String, Map<String, PageMetatag>> extractSeoParameters(HttpServletRequest request) {
-        Map<String, Map<String, PageMetatag>> seoParameters = new HashMap<>();
+    protected static Map<String, Map<String, ObjectMetatag>> extractSeoParameters(HttpServletRequest request) {
+        Map<String, Map<String, ObjectMetatag>> seoParameters = new HashMap<>();
         List<Lang> langs = getLangManager(request).getLangs();
         for (Lang lang : langs) {
-            Map<String, PageMetatag> langMetas = new HashMap<>();
+            Map<String, ObjectMetatag> langMetas = new HashMap<>();
             String mainPrefix = "pageMetataKey_" + lang.getCode() + "_";
             int index = 0;
             while (!StringUtils.isBlank(request.getParameter(mainPrefix+index))) {
@@ -48,7 +48,7 @@ public class SeoPageActionUtils {
                 String attributeName = request.getParameter("pageMetataAttribute_" + lang.getCode() + "_" + index);
                 String value = request.getParameter("pageMetataValue_" + lang.getCode() + "_" + index);
                 String useDefaultLang = request.getParameter("pageMetataUseDefaultLang_" + lang.getCode() + "_" + index);
-                PageMetatag meta = new PageMetatag(lang.getCode(), key, value);
+                ObjectMetatag meta = new ObjectMetatag(lang.getCode(), key, value);
                 meta.setKeyAttribute(attributeName);
                 meta.setUseDefaultLangValue(!lang.isDefault() && null != useDefaultLang);
                 langMetas.put(key, meta);
@@ -62,11 +62,11 @@ public class SeoPageActionUtils {
     }
     
     protected static void extractAndSetSeoParameters(HttpServletRequest request) {
-        Map<String, Map<String, PageMetatag>> seoParameters = extractSeoParameters(request);
+        Map<String, Map<String, ObjectMetatag>> seoParameters = extractSeoParameters(request);
         setSeoParameters(seoParameters, request);
     }
     
-    protected static void setSeoParameters(Map<String, Map<String, PageMetatag>> seoParameters, HttpServletRequest request) {
+    protected static void setSeoParameters(Map<String, Map<String, ObjectMetatag>> seoParameters, HttpServletRequest request) {
         request.setAttribute(PageActionAspect.PARAM_METATAGS, seoParameters);
         request.setAttribute(PageActionAspect.PARAM_METATAG_ATTRIBUTE_NAMES, Metatag.getAttributeNames());
     }
