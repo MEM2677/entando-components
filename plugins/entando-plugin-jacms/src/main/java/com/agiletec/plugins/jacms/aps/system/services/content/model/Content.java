@@ -21,6 +21,8 @@ import com.agiletec.aps.system.common.entity.model.ApsEntity;
 import com.agiletec.aps.system.common.entity.model.IApsEntity;
 import com.agiletec.aps.system.common.entity.parse.IApsEntityDOM;
 import com.agiletec.plugins.jacms.aps.system.services.content.parse.ContentDOM;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Rappresenta un contenuto informativo. 
@@ -217,6 +219,21 @@ public class Content extends ApsEntity {
 	public void setLastEditor(String lastEditor) {
 		this._lastEditor = lastEditor;
 	}
+
+    public Map<String, Object> getExtraParams() {
+        return extraParams;
+    }
+
+    public void setExtraParams(Map<String, Object> extraParams) {
+        this.extraParams = extraParams;
+    }
+    
+    public void addExtraParam(String key, Object value) {
+        if (null == this.getExtraParams()) {
+            this.setExtraParams(new HashMap<>());
+        }
+        this.getExtraParams().put(key, value);
+    }
 	
 	private String _status;
 	private boolean _onLine;
@@ -230,6 +247,8 @@ public class Content extends ApsEntity {
 	private String _version;
 	private String _firstEditor;
 	private String _lastEditor;
+    
+	private Map<String, Object> extraParams;
 	
 	/**
 	 * La descrizione dello stato del nuovo contenuto.
