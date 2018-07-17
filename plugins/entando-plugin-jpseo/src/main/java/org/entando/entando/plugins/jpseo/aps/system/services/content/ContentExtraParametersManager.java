@@ -24,75 +24,99 @@ package org.entando.entando.plugins.jpseo.aps.system.services.content;
 import com.agiletec.aps.system.common.AbstractService;
 import com.agiletec.aps.system.exception.ApsSystemException;
 import com.agiletec.plugins.jacms.aps.system.services.content.model.Content;
+import java.util.HashMap;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.entando.entando.plugins.jpseo.aps.system.JpseoSystemConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Aspect
 public class ContentExtraParametersManager extends AbstractService implements IContentExtraParametersManager {
 
-	private static final Logger logger =  LoggerFactory.getLogger(ContentExtraParametersManager.class);
-    
-	private IContentExtraParametersDAO contentExtraParametersDAO;
+    private static final Logger logger = LoggerFactory.getLogger(ContentExtraParametersManager.class);
 
-	@Override
-	public void init() throws Exception {
-		logger.debug("{} ready.", this.getClass().getName());
-	}
-    
-    @AfterReturning(pointcut = "execution(* com.agiletec.plugins.jacms.aps.system.services.content.IContentManager.loadContent(..)) && args(id,onLine,..)", returning = "content")
-    public void injectParameters(String id, Object onLine, Content content) {
-        
+    private IContentExtraParametersDAO contentExtraParametersDAO;
+
+    @Override
+    public void init() throws Exception {
+        logger.debug("{} ready.", this.getClass().getName());
     }
-    
-	@Override
-	public ContentExtraParameters getContentExtraParameters(String contentId) throws ApsSystemException {
-		ContentExtraParameters contentExtraParameters = null;
-		try {
-			contentExtraParameters = this.getContentExtraParametersDAO().loadContentExtraParameters(contentId);
-		} catch (Throwable t) {
-			logger.error("Error loading contentExtraParameters with id '{}'", contentId,  t);
-			throw new ApsSystemException("Error loading contentExtraParameters with id: " + contentId, t);
-		}
-		return contentExtraParameters;
-	}
-    
-	@Override
-	public void addContentExtraParameters(ContentExtraParameters contentExtraParameters) throws ApsSystemException {
-		try {
-			this.getContentExtraParametersDAO().insertContentExtraParameters(contentExtraParameters);
-		} catch (Throwable t) {
-			logger.error("Error adding ContentExtraParameters", t);
-			throw new ApsSystemException("Error adding ContentExtraParameters", t);
-		}
-	}
- 
-	@Override
-	public void updateContentExtraParameters(ContentExtraParameters contentExtraParameters) throws ApsSystemException {
-		try {
-			this.getContentExtraParametersDAO().updateContentExtraParameters(contentExtraParameters);
-		} catch (Throwable t) {
-			logger.error("Error updating ContentExtraParameters", t);
-			throw new ApsSystemException("Error updating ContentExtraParameters " + contentExtraParameters, t);
-		}
-	}
 
-	@Override
-	public void deleteContentExtraParameters(String contentId) throws ApsSystemException {
-		try {
-			this.getContentExtraParametersDAO().removeContentExtraParameters(contentId);
-		} catch (Throwable t) {
-			logger.error("Error deleting ContentExtraParameters with id {}", contentId, t);
-			throw new ApsSystemException("Error deleting ContentExtraParameters with id:" + contentId, t);
-		}
-	}
+    @AfterReturning(pointcut = "execution(* com.agiletec.plugins.jacms.aps.system.services.content.IContentManager.loadContent(..)) && args(id,onLine,..)", returning = "content")
+    public void injectParameters(String id, boolean onLine, Content content) {
+        try {
+            if (null == content) {
+                return;
+            }
+            ContentExtraParameters extraParameters = this.getContentExtraParameters(id);
+            if (null == extraParameters) {
+                return;
+            }
+            String xmlConfig = (onLine) ? extraParameters.getOnlinexml() : extraParameters.getWorkxml();
+            if (StringUtils.isBlank(xmlConfig)) {
+                return;
+            }
+            SeoContentExtraConfigDOM dom = new SeoContentExtraConfigDOM();
+            ContentMetadata contentMetadata = dom.addExtraConfig(xmlConfig);
+            if (null == content.getExtraParams()) {
+                content.setExtraParams(new HashMap<>());
+            }
+            content.getExtraParams().put(JpseoSystemConstants.CONTENT_METADATA_KEY, contentMetadata);
+        } catch (Exception e) {
+            logger.error("Error extracting seo parameters for content {}", id, e);
+        }
+    }
+
+    @Override
+    public ContentExtraParameters getContentExtraParameters(String contentId) throws ApsSystemException {
+        ContentExtraParameters contentExtraParameters = null;
+        try {
+            contentExtraParameters = this.getContentExtraParametersDAO().loadContentExtraParameters(contentId);
+        } catch (Throwable t) {
+            logger.error("Error loading contentExtraParameters with id '{}'", contentId, t);
+            throw new ApsSystemException("Error loading contentExtraParameters with id: " + contentId, t);
+        }
+        return contentExtraParameters;
+    }
+
+    @Override
+    public void addContentExtraParameters(ContentExtraParameters contentExtraParameters) throws ApsSystemException {
+        try {
+            this.getContentExtraParametersDAO().insertContentExtraParameters(contentExtraParameters);
+        } catch (Throwable t) {
+            logger.error("Error adding ContentExtraParameters", t);
+            throw new ApsSystemException("Error adding ContentExtraParameters", t);
+        }
+    }
+
+    @Override
+    public void updateContentExtraParameters(ContentExtraParameters contentExtraParameters) throws ApsSystemException {
+        try {
+            this.getContentExtraParametersDAO().updateContentExtraParameters(contentExtraParameters);
+        } catch (Throwable t) {
+            logger.error("Error updating ContentExtraParameters", t);
+            throw new ApsSystemException("Error updating ContentExtraParameters " + contentExtraParameters, t);
+        }
+    }
+
+    @Override
+    public void deleteContentExtraParameters(String contentId) throws ApsSystemException {
+        try {
+            this.getContentExtraParametersDAO().removeContentExtraParameters(contentId);
+        } catch (Throwable t) {
+            logger.error("Error deleting ContentExtraParameters with id {}", contentId, t);
+            throw new ApsSystemException("Error deleting ContentExtraParameters with id:" + contentId, t);
+        }
+    }
 
     public void setContentExtraParametersDAO(IContentExtraParametersDAO contentExtraParametersDAO) {
-		 this.contentExtraParametersDAO = contentExtraParametersDAO;
-	}
-	protected IContentExtraParametersDAO getContentExtraParametersDAO() {
-		return contentExtraParametersDAO;
-	}
-    
+        this.contentExtraParametersDAO = contentExtraParametersDAO;
+    }
+
+    protected IContentExtraParametersDAO getContentExtraParametersDAO() {
+        return contentExtraParametersDAO;
+    }
+
 }

@@ -21,27 +21,27 @@
  */
 package org.entando.entando.plugins.jpseo;
 
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.entando.entando.plugins.jpseo.aps.system.services.metatag.TestMetatagCatalogue;
-
+import org.entando.entando.plugins.jpseo.aps.system.services.content.TestContentExtraParametersManager;
+import org.entando.entando.plugins.jpseo.aps.system.services.metatag.TestMetatagCatalog;
 import org.entando.entando.plugins.jpseo.apsadmin.content.TestContentAction;
 import org.entando.entando.plugins.jpseo.apsadmin.portal.TestPageAction;
 import org.entando.entando.plugins.jpseo.apsadmin.portal.TestPageSettingsAction;
 
 public class AllTests {
-	
-	public static Test suite() {
-		TestSuite suite = new TestSuite("Seo plugin");
-        
-		suite.addTestSuite(TestMetatagCatalogue.class);
-        
-		suite.addTestSuite(TestContentAction.class);
-		suite.addTestSuite(TestPageAction.class);
-		suite.addTestSuite(TestPageSettingsAction.class);
-        
-		return suite;
-	}
+
+    public static Test suite() {
+        TestSuite suite = new TestSuite("Seo plugin");
+
+        suite.addTestSuite(TestMetatagCatalog.class);
+        suite.addTestSuite(TestContentExtraParametersManager.class);
+
+        suite.addTestSuite(TestContentAction.class);
+        suite.addTestSuite(TestPageAction.class);
+        suite.addTestSuite(TestPageSettingsAction.class);
+
+        return suite;
+    }
 
 }

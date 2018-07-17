@@ -25,19 +25,21 @@ package org.entando.entando.plugins.jpseo.aps.system;
  * @author E.Santoboni
  */
 public class JpseoSystemConstants {
-	
-	public static final String ATTRIBUTE_ROLE_FRIENDLY_CODE = "jacms:friendlyCode";
-	
-	public static final String ATTRIBUTE_ROLE_DESCRIPTION = "jacms:description";
-	
-	public static final String EXTRAPAR_EXTRA_PAGE_DESCRIPTIONS = "jpseo:extraPageDescriptions";
-	
-	public static final String EXTRAPAR_HIDDEN_CONTENT_ID = "jpseo:hiddenContentId";
-	
-	public static final String SEO_METATAG_CATALOG = "jpseoSeoMetatagCatalog";
-    
+
+    public static final String CONTENT_METADATA_KEY = "jpseo:contentMetadataKey";
+
+    public static final String ATTRIBUTE_ROLE_FRIENDLY_CODE = "jacms:friendlyCode";
+
+    public static final String ATTRIBUTE_ROLE_DESCRIPTION = "jacms:description";
+
+    public static final String EXTRAPAR_EXTRA_PAGE_DESCRIPTIONS = "jpseo:extraPageDescriptions";
+
+    public static final String EXTRAPAR_HIDDEN_CONTENT_ID = "jpseo:hiddenContentId";
+
+    public static final String SEO_METATAG_CATALOG = "jpseoSeoMetatagCatalog";
+
     public static final String SEO_MAPPING_MANAGER = "jpseoSeoMappingManager";
-    
+
     public static final String ROBOT_ALTERNATIVE_PATH_PARAM_NAME = "jpseo_robotFileAlternativePath";
-	
+
 }

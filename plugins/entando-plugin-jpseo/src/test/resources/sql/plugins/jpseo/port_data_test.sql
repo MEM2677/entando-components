@@ -1,3 +1,80 @@
+INSERT INTO jpseo_contentextraparams(contentid, workxml, onlinexml) VALUES ('ART111', '<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <descriptions>
+    <property key="en">EN Content Description 1</property>
+    <property key="it">Descrizione IT Content 1</property>
+  </descriptions>
+  <keywords>
+    <property key="en" useDefaultLang="true" >keyEN1.1,keyEN1.2</property>
+    <property key="it">keyIT1.1,keyIT1.2,keyIT1.3,keyIT1.4</property>
+  </keywords>
+  <complexParameters>
+    <parameter key="key1">
+        <property key="it">VALUE_1 IT ART111</property>
+    </parameter>
+    <parameter key="key2">
+      <property key="fr">VALUE_2 FR ART111</property>
+      <property key="en">VALUE_2 EN ART111</property>
+      <property key="it">VALUE_2 IT ART111</property>
+    </parameter>
+    <parameter key="key3">
+      <property key="en">VALUE_3 EN ART111</property>
+      <property key="it">VALUE_3 IT ART111</property>
+    </parameter>
+    <parameter key="key4">
+        <property key="it">VALUE_4 IT ART111</property>
+    </parameter>
+  </complexParameters>
+</config>', NULL);
+
+
+INSERT INTO jpseo_contentextraparams(contentid, workxml, onlinexml) VALUES ('ART1', '<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <descriptions>
+    <property key="en">EN Content Description 1 ART1 work</property>
+  </descriptions>
+  <keywords>
+    <property key="en" useDefaultLang="true" >work_ART1_keyEN1.1,work_ART1_keyEN1.2</property>
+  </keywords>
+  <complexParameters>
+    <parameter key="key1">
+        <property key="it">VALUE_1 IT ART1 work</property>
+    </parameter>
+    <parameter key="key2">
+      <property key="en">VALUE_2 EN ART1 work</property>
+      <property key="it">VALUE_2 IT ART1 work</property>
+    </parameter>
+    <parameter key="key3">
+      <property key="en">VALUE_3 EN ART1 work</property>
+    </parameter>
+    <parameter key="key4">
+        <property key="it">VALUE_4 IT ART1 work</property>
+    </parameter>
+  </complexParameters>
+</config>', '<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <descriptions>
+    <property key="en">EN Content Description 1 ART1 online</property>
+  </descriptions>
+  <keywords>
+    <property key="en" useDefaultLang="true" >online_ART1_keyEN1.1,online_ART1_keyEN1.2</property>
+  </keywords>
+  <complexParameters>
+    <parameter key="key1">
+        <property key="it">VALUE_1 IT ART1 online</property>
+    </parameter>
+    <parameter key="key3">
+      <property key="en">VALUE_3 EN ART1 online</property>
+    </parameter>
+    <parameter key="key4">
+        <property key="it">VALUE_4 IT ART1 online</property>
+    </parameter>
+  </complexParameters>
+</config>');
+
+
+
+
 INSERT INTO pages (code, parentcode, pos, groupcode) VALUES ('seo_page_1', 'homepage', 7, 'free');
 INSERT INTO pages (code, parentcode, pos, groupcode) VALUES ('seo_page_2', 'homepage', 8, 'free');
 
