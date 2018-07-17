@@ -23,9 +23,13 @@ package org.entando.entando.plugins.jpseo.aps.system.services.content;
 
 import com.agiletec.aps.system.common.AbstractService;
 import com.agiletec.aps.system.exception.ApsSystemException;
+import com.agiletec.plugins.jacms.aps.system.services.content.model.Content;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Aspect
 public class ContentExtraParametersManager extends AbstractService implements IContentExtraParametersManager {
 
 	private static final Logger logger =  LoggerFactory.getLogger(ContentExtraParametersManager.class);
@@ -36,6 +40,11 @@ public class ContentExtraParametersManager extends AbstractService implements IC
 	public void init() throws Exception {
 		logger.debug("{} ready.", this.getClass().getName());
 	}
+    
+    @AfterReturning(pointcut = "execution(* com.agiletec.plugins.jacms.aps.system.services.content.IContentManager.loadContent(..)) && args(id,onLine,..)", returning = "content")
+    public void injectParameters(String id, Object onLine, Content content) {
+        
+    }
     
 	@Override
 	public ContentExtraParameters getContentExtraParameters(String contentId) throws ApsSystemException {
