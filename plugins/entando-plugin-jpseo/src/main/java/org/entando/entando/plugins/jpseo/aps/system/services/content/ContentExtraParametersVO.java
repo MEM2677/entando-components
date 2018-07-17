@@ -21,7 +21,7 @@
  */
 package org.entando.entando.plugins.jpseo.aps.system.services.content;
 
-public class ContentExtraParameters {
+public class ContentExtraParametersVO {
     
 	private String contentid;
 	private String workxml;

@@ -26,8 +26,10 @@ import com.agiletec.aps.system.exception.ApsSystemException;
 import com.agiletec.plugins.jacms.aps.system.services.content.model.Content;
 import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.entando.entando.plugins.jpseo.aps.system.JpseoSystemConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +52,7 @@ public class ContentExtraParametersManager extends AbstractService implements IC
             if (null == content) {
                 return;
             }
-            ContentExtraParameters extraParameters = this.getContentExtraParameters(id);
+            ContentExtraParametersVO extraParameters = this.getContentExtraParameters(id);
             if (null == extraParameters) {
                 return;
             }
@@ -69,9 +71,88 @@ public class ContentExtraParametersManager extends AbstractService implements IC
         }
     }
 
+    @After("execution(* com.agiletec.plugins.jacms.aps.system.services.content.IContentManager.saveContent(..)) && args(content)")
+    public void saveContent(Content content) {
+        if (null == content || null == content.getExtraParams() || null == content.getExtraParams().get(JpseoSystemConstants.CONTENT_METADATA_KEY)) {
+            return;
+        }
+        String xml = this.extractXmlConfiguration(content);
+        ContentExtraParametersVO extraParameters = this.getContentExtraParametersDAO().loadContentExtraParameters(content.getId());
+        if (null == extraParameters) {
+            extraParameters = new ContentExtraParametersVO();
+            extraParameters.setContentid(content.getId());
+            extraParameters.setWorkxml(xml);
+            this.getContentExtraParametersDAO().insertContentExtraParameters(extraParameters);
+        } else {
+            extraParameters.setWorkxml(xml);
+            this.getContentExtraParametersDAO().updateContentExtraParameters(extraParameters);
+        }
+    }
+
+    @After("execution(* com.agiletec.plugins.jacms.aps.system.services.content.IContentManager.addContent(..)) && args(content)")
+    public void addContent(Content content) {
+        this.saveContent(content);
+    }
+
+    @After("execution(* com.agiletec.plugins.jacms.aps.system.services.content.IContentManager.insertOnLineContent(..)) && args(content)")
+    public void insertOnLineContent(Content content) {
+        if (null == content) {
+            return;
+        }
+        String xml = this.extractXmlConfiguration(content);
+        if (null == xml) {
+            this.getContentExtraParametersDAO().removeContentExtraParameters(content.getId());
+            return;
+        }
+        ContentExtraParametersVO extraParameters = this.getContentExtraParametersDAO().loadContentExtraParameters(content.getId());
+        boolean hasToBeInsert = false;
+        if (null == extraParameters) {
+            extraParameters = new ContentExtraParametersVO();
+            extraParameters.setContentid(content.getId());
+            hasToBeInsert = true;
+        }
+        extraParameters.setWorkxml(xml);
+        extraParameters.setOnlinexml(xml);
+        if (hasToBeInsert) {
+            this.getContentExtraParametersDAO().insertContentExtraParameters(extraParameters);
+        } else {
+            this.getContentExtraParametersDAO().updateContentExtraParameters(extraParameters);
+        }
+    }
+
+    private String extractXmlConfiguration(Content content) {
+        if (null == content || null == content.getExtraParams() || null == content.getExtraParams().get(JpseoSystemConstants.CONTENT_METADATA_KEY)) {
+            return null;
+        }
+        ContentMetadata contentMetadata = (ContentMetadata) content.getExtraParams().get(JpseoSystemConstants.CONTENT_METADATA_KEY);
+        SeoContentExtraConfigDOM dom = new SeoContentExtraConfigDOM();
+        return dom.extractXml(contentMetadata);
+    }
+
+    @After("execution(* com.agiletec.plugins.jacms.aps.system.services.content.IContentManager.removeOnLineContent(..)) && args(content)")
+    public void removeOnLineContent(Content content) {
+        if (null == content) {
+            return;
+        }
+        ContentExtraParametersVO extraParameters = this.getContentExtraParametersDAO().loadContentExtraParameters(content.getId());
+        if (null == extraParameters) {
+            return;
+        }
+        extraParameters.setOnlinexml(null);
+        this.getContentExtraParametersDAO().updateContentExtraParameters(extraParameters);
+    }
+
+    @Before("execution(* com.agiletec.plugins.jacms.aps.system.services.content.IContentManager.deleteContent(..)) && args(content)")
+    public void deleteContent(Content content) {
+        if (null == content) {
+            return;
+        }
+        this.getContentExtraParametersDAO().removeContentExtraParameters(content.getId());
+    }
+
     @Override
-    public ContentExtraParameters getContentExtraParameters(String contentId) throws ApsSystemException {
-        ContentExtraParameters contentExtraParameters = null;
+    public ContentExtraParametersVO getContentExtraParameters(String contentId) throws ApsSystemException {
+        ContentExtraParametersVO contentExtraParameters = null;
         try {
             contentExtraParameters = this.getContentExtraParametersDAO().loadContentExtraParameters(contentId);
         } catch (Throwable t) {
@@ -82,7 +163,7 @@ public class ContentExtraParametersManager extends AbstractService implements IC
     }
 
     @Override
-    public void addContentExtraParameters(ContentExtraParameters contentExtraParameters) throws ApsSystemException {
+    public void addContentExtraParameters(ContentExtraParametersVO contentExtraParameters) throws ApsSystemException {
         try {
             this.getContentExtraParametersDAO().insertContentExtraParameters(contentExtraParameters);
         } catch (Throwable t) {
@@ -92,7 +173,7 @@ public class ContentExtraParametersManager extends AbstractService implements IC
     }
 
     @Override
-    public void updateContentExtraParameters(ContentExtraParameters contentExtraParameters) throws ApsSystemException {
+    public void updateContentExtraParameters(ContentExtraParametersVO contentExtraParameters) throws ApsSystemException {
         try {
             this.getContentExtraParametersDAO().updateContentExtraParameters(contentExtraParameters);
         } catch (Throwable t) {

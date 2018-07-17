@@ -36,14 +36,17 @@ import org.jdom.Element;
  * @author E.Santoboni
  */
 public class ExtraConfigDOMUtil {
-    
+
+    public static final String DESCRIPTION_PROPERTY_NAME = "description";
+    public static final String KEYWORDS_PROPERTY_NAME = "keywords";
+
     private static final String DESCRIPTIONS_ELEMENT_NAME = "descriptions";
     private static final String KEYWORDS_ELEMENT_NAME = "keywords";
     private static final String USE_DEFAULT_LANG_ELEMENT_NAME = "useDefaultLang";
     private static final String PROPERTY_ELEMENT_NAME = "property";
     private static final String KEY_ATTRIBUTE_NAME = "key";
     private static final String COMPLEX_PARAMS_ELEMENT_NAME = "complexParameters";
-    
+
     public static Map<String, Map<String, ObjectMetatag>> extractComplexParameters(List<Element> elements) {
         Map<String, Map<String, ObjectMetatag>> complexParameters = new HashMap<>();
         if (null == elements) {
@@ -83,7 +86,7 @@ public class ExtraConfigDOMUtil {
         }
         return complexParameters;
     }
-    
+
     private static Map<String, ObjectMetatag> extractLangMap(String code, Map<String, Map<String, ObjectMetatag>> complexParameters) {
         Map<String, ObjectMetatag> langMap = complexParameters.get(code);
         if (null == langMap) {
@@ -92,19 +95,19 @@ public class ExtraConfigDOMUtil {
         }
         return langMap;
     }
-    
+
     public static void extractConfig(IObjectMetadata seoPage, Element root) {
         Element descriptionsElement = root.getChild(DESCRIPTIONS_ELEMENT_NAME);
-        extractMultilangProperty(descriptionsElement, seoPage.getDescriptions(), "description");
+        extractMultilangProperty(descriptionsElement, seoPage.getDescriptions(), DESCRIPTION_PROPERTY_NAME);
         Element keywordsElement = root.getChild(KEYWORDS_ELEMENT_NAME);
-        extractMultilangProperty(keywordsElement, seoPage.getKeywords(), "keywords");
+        extractMultilangProperty(keywordsElement, seoPage.getKeywords(), KEYWORDS_PROPERTY_NAME);
         Element complexParamElement = root.getChild(COMPLEX_PARAMS_ELEMENT_NAME);
         if (null != complexParamElement) {
             List<Element> elements = complexParamElement.getChildren();
             seoPage.setComplexParameters(ExtraConfigDOMUtil.extractComplexParameters(elements));
         }
     }
-    
+
     private static void extractMultilangProperty(Element mainElement, ApsProperties propertyToFill, String propertyName) {
         if (null != mainElement) {
             List<Element> mainElements = mainElement.getChildren(PROPERTY_ELEMENT_NAME);
@@ -118,7 +121,7 @@ public class ExtraConfigDOMUtil {
             }
         }
     }
-    
+
     public static void fillDocument(Element elementRoot, IObjectMetadata seoPageMetadata) {
         ApsProperties descriptions = seoPageMetadata.getDescriptions();
         fillMultilangProperty(descriptions, elementRoot, DESCRIPTIONS_ELEMENT_NAME);
@@ -130,7 +133,7 @@ public class ExtraConfigDOMUtil {
             elementRoot.addContent(complexConfigElement);
         }
     }
-    
+
     private static void fillMultilangProperty(ApsProperties property, Element elementToFill, String elementName) {
         if (null != property && property.size() > 0) {
             Element mlElement = new Element(elementName);
@@ -147,7 +150,7 @@ public class ExtraConfigDOMUtil {
             }
         }
     }
-    
+
     public static void addComplexParameters(Element elementRoot, Map<String, Map<String, ObjectMetatag>> parameters) {
         if (null == parameters) {
             return;
@@ -184,12 +187,13 @@ public class ExtraConfigDOMUtil {
             }
         }
     }
-    
+
     /**
      * Utility method
+     *
      * @param seoParameters
      * @param defaultLang
-     * @return 
+     * @return
      */
     public static Map<String, Map<String, ObjectMetatag>> extractRightParams(Map<String, Map<String, ObjectMetatag>> seoParameters, Lang defaultLang) {
         Map<String, Map<String, ObjectMetatag>> newMap = new HashMap<>();
@@ -238,5 +242,5 @@ public class ExtraConfigDOMUtil {
         }
         return newMap;
     }
-    
+
 }

@@ -40,6 +40,8 @@ public class JpseoSystemConstants {
 
     public static final String SEO_MAPPING_MANAGER = "jpseoSeoMappingManager";
 
+    public static final String CONTENT_EXTRA_PARAMS_MANAGER = "jpseoContentExtraParametersManager";
+
     public static final String ROBOT_ALTERNATIVE_PATH_PARAM_NAME = "jpseo_robotFileAlternativePath";
 
 }

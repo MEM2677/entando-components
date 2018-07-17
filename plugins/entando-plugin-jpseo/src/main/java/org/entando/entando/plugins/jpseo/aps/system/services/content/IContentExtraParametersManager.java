@@ -25,11 +25,11 @@ import com.agiletec.aps.system.exception.ApsSystemException;
 
 public interface IContentExtraParametersManager {
 
-	public ContentExtraParameters getContentExtraParameters(String contentId) throws ApsSystemException;
+	public ContentExtraParametersVO getContentExtraParameters(String contentId) throws ApsSystemException;
 
-	public void addContentExtraParameters(ContentExtraParameters contentExtraParameters) throws ApsSystemException;
+	public void addContentExtraParameters(ContentExtraParametersVO contentExtraParameters) throws ApsSystemException;
 
-	public void updateContentExtraParameters(ContentExtraParameters contentExtraParameters) throws ApsSystemException;
+	public void updateContentExtraParameters(ContentExtraParametersVO contentExtraParameters) throws ApsSystemException;
 
 	public void deleteContentExtraParameters(String contentId) throws ApsSystemException;
     

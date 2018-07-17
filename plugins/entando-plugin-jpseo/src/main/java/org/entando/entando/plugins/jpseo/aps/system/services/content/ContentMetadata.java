@@ -39,7 +39,8 @@ public class ContentMetadata implements IObjectMetadata, Serializable {
 
     @Override
     public String getDescription(String langCode) {
-        return this.getDescriptions().getProperty(langCode);
+        ObjectMetatag meta = (null != this.getDescriptions()) ? (ObjectMetatag) this.getDescriptions().get(langCode) : null;
+        return (null != meta) ? meta.getValue() : null;
     }
 
     @Override
@@ -50,6 +51,11 @@ public class ContentMetadata implements IObjectMetadata, Serializable {
     @Override
     public void setDescriptions(ApsProperties descriptions) {
         this.descriptions = descriptions;
+    }
+
+    public String getKeyword(String langCode) {
+        ObjectMetatag meta = (null != this.getKeywords()) ? (ObjectMetatag) this.getKeywords().get(langCode) : null;
+        return (null != meta) ? meta.getValue() : null;
     }
 
     @Override

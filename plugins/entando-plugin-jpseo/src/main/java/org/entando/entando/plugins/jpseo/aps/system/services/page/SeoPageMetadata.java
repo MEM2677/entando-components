@@ -45,7 +45,8 @@ public class SeoPageMetadata extends PageMetadata implements IObjectMetadata {
 
     @Override
     public String getDescription(String langCode) {
-        return this.getDescriptions().getProperty(langCode);
+        ObjectMetatag meta = (null != this.getDescriptions()) ? (ObjectMetatag) this.getDescriptions().get(langCode) : null;
+        return (null != meta) ? meta.getValue() : null;
     }
 
     @Override
@@ -67,7 +68,7 @@ public class SeoPageMetadata extends PageMetadata implements IObjectMetadata {
     public void setKeywords(ApsProperties keywords) {
         this.keywords = keywords;
     }
-    
+
     public boolean isUseExtraDescriptions() {
         return useExtraDescriptions;
     }

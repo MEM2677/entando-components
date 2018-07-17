@@ -23,12 +23,12 @@ package org.entando.entando.plugins.jpseo.aps.system.services.content;
 
 public interface IContentExtraParametersDAO {
 	
-	public ContentExtraParameters loadContentExtraParameters(String contentId);
+	public ContentExtraParametersVO loadContentExtraParameters(String contentId);
 
 	public void removeContentExtraParameters(String contentId);
 	
-	public void updateContentExtraParameters(ContentExtraParameters contentExtraParameters);
+	public void updateContentExtraParameters(ContentExtraParametersVO contentExtraParameters);
 
-	public void insertContentExtraParameters(ContentExtraParameters contentExtraParameters);
+	public void insertContentExtraParameters(ContentExtraParametersVO contentExtraParameters);
     
 }

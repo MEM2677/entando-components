@@ -26,53 +26,29 @@ import com.agiletec.aps.util.ApsProperties;
 import com.agiletec.plugins.jacms.aps.system.JacmsSystemConstants;
 import com.agiletec.plugins.jacms.aps.system.services.content.IContentManager;
 import com.agiletec.plugins.jacms.aps.system.services.content.model.Content;
+import java.util.HashMap;
 import java.util.Map;
 import org.entando.entando.plugins.jpseo.aps.system.JpseoSystemConstants;
+import org.entando.entando.plugins.jpseo.aps.system.services.mapping.ExtraConfigDOMUtil;
 import org.entando.entando.plugins.jpseo.aps.system.services.mapping.ObjectMetatag;
 
 /**
- * @author M. Morini - E.Santoboni
+ * @author E.Santoboni
  */
 public class TestContentExtraParametersManager extends BaseTestCase {
+
+    private IContentManager contentManager = null;
+    private IContentExtraParametersManager contentExtraParametersManager;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        this.init();
+        this.contentManager = (IContentManager) this.getService(JacmsSystemConstants.CONTENT_MANAGER);
+        this.contentExtraParametersManager = (IContentExtraParametersManager) this.getService(JpseoSystemConstants.CONTENT_EXTRA_PARAMS_MANAGER);
     }
 
-    /*
-<config>
-  <descriptions>
-    <property key="en">EN Content Description 1</property>
-    <property key="it">Descrizione IT Content 1</property>
-  </descriptions>
-  <keywords>
-    <property key="en" useDefaultLang="true" >keyEN1.1,keyEN1.2</property>
-    <property key="it">keyIT1.1,keyIT1.2,keyIT1.3,keyIT1.4</property>
-  </keywords>
-  <complexParameters>
-    <parameter key="key1">
-        <property key="it">VALUE_1 IT ART111</property>
-    </parameter>
-    <parameter key="key2">
-      <property key="fr">VALUE_2 FR ART111</property>
-      <property key="en">VALUE_2 EN ART111</property>
-      <property key="it">VALUE_2 IT ART111</property>
-    </parameter>
-    <parameter key="key3">
-      <property key="en">VALUE_3 EN ART111</property>
-      <property key="it">VALUE_3 IT ART111</property>
-    </parameter>
-    <parameter key="key4">
-        <property key="it">VALUE_4 IT ART111</property>
-    </parameter>
-  </complexParameters>
-</config>
-
-     */
     public void testLoadContent_1() throws Throwable {
-        Content contentWork = this._contentManager.loadContent("ART111", false);
+        Content contentWork = this.contentManager.loadContent("ART111", false);
         assertNotNull(contentWork);
         ContentMetadata contentMetadata = (ContentMetadata) contentWork.getExtraParams().get(JpseoSystemConstants.CONTENT_METADATA_KEY);
         assertNotNull(contentMetadata);
@@ -89,18 +65,18 @@ public class TestContentExtraParametersManager extends BaseTestCase {
         assertEquals("keyEN1.1,keyEN1.2", metaKeywordsEn.getValue());
         assertTrue(metaKeywordsEn.isUseDefaultLangValue());
 
-        Content contentOnLine = this._contentManager.loadContent("ART111", true);
+        Content contentOnLine = this.contentManager.loadContent("ART111", true);
         assertNotNull(contentOnLine);
         assertNull(contentOnLine.getExtraParams());
     }
 
     public void testLoadContent_2() throws Throwable {
-        Content contentWork = this._contentManager.loadContent("ART90", false);
+        Content contentWork = this.contentManager.loadContent("ART90", false);
         assertNull(contentWork);
     }
 
     public void testLoadContent_3() throws Throwable {
-        Content contentWork = this._contentManager.loadContent("ART1", false);
+        Content contentWork = this.contentManager.loadContent("ART1", false);
         assertNotNull(contentWork);
         ContentMetadata contentMetadata = (ContentMetadata) contentWork.getExtraParams().get(JpseoSystemConstants.CONTENT_METADATA_KEY);
         assertNotNull(contentMetadata);
@@ -116,7 +92,7 @@ public class TestContentExtraParametersManager extends BaseTestCase {
         assertEquals(3, keyLangIt.size());
         assertEquals("VALUE_4 IT ART1 work", keyLangIt.get("key4").getValue());
 
-        Content contentOnLine = this._contentManager.loadContent("ART1", true);
+        Content contentOnLine = this.contentManager.loadContent("ART1", true);
         contentMetadata = (ContentMetadata) contentOnLine.getExtraParams().get(JpseoSystemConstants.CONTENT_METADATA_KEY);
         assertNotNull(contentMetadata);
         complexParams = contentMetadata.getComplexParameters();
@@ -133,14 +109,101 @@ public class TestContentExtraParametersManager extends BaseTestCase {
         assertEquals("VALUE_4 IT ART1 online", keyLangIt.get("key4").getValue());
     }
 
-    private void init() throws Exception {
+    public void testAddExtraParams() throws Throwable {
+        String[] masterContentIds = {"ART111", "ART179", "ALL4", "EVN23", "EVN24"};
+        String[] newContentIds = null;
         try {
-            this._contentManager = (IContentManager) this.getService(JacmsSystemConstants.CONTENT_MANAGER);
+            newContentIds = this.addContentsForTest(masterContentIds, false);
+            for (int i = 0; i < newContentIds.length; i++) {
+                String newContentId = newContentIds[i];
+                Content content = this.contentManager.loadContent(newContentId, false);
+                assertNotNull(content.getExtraParams());
+                ContentMetadata metas = (ContentMetadata) content.getExtraParams().get(JpseoSystemConstants.CONTENT_METADATA_KEY);
+                assertNotNull(metas);
+                String[] langs = {"it", "en"};
+                for (String langCode : langs) {
+                    assertEquals("Description " + langCode + " " + this.getTestMarker(i), metas.getDescription(langCode));
+                    assertEquals("Keywords " + langCode + " " + this.getTestMarker(i), metas.getKeyword(langCode));
+                    Map<String, ObjectMetatag> keyLang = metas.getComplexParameters().get(langCode);
+                    for (int j = 0; j < 5; j++) {
+                        ObjectMetatag meta = keyLang.get("key" + j);
+                        assertNotNull(meta);
+                        assertEquals("Meta " + langCode + " " + this.getTestMarker(i), meta.getValue());
+                    }
+                }
+            }
         } catch (Throwable t) {
-            throw new Exception(t);
+            t.printStackTrace();
+            throw t;
+        } finally {
+            this.deleteContents(newContentIds);
         }
     }
 
-    private IContentManager _contentManager = null;
+    protected String[] addContentsForTest(String[] masterContentIds, boolean publish) throws Throwable {
+        String[] newContentIds = new String[masterContentIds.length];
+        try {
+            for (int i = 0; i < masterContentIds.length; i++) {
+                Content content = this.contentManager.loadContent(masterContentIds[i], false);
+                content.setId(null);
+                ContentMetadata metas = this.createMockMetadata(this.getTestMarker(i));
+                content.addExtraParam(JpseoSystemConstants.CONTENT_METADATA_KEY, metas);
+                this.contentManager.saveContent(content);
+                newContentIds[i] = content.getId();
+                if (publish) {
+                    this.contentManager.insertOnLineContent(content);
+                }
+                ContentExtraParametersVO contentParamsVO = this.contentExtraParametersManager.getContentExtraParameters(content.getId());
+                assertNotNull(contentParamsVO);
+                assertNotNull(contentParamsVO.getWorkxml());
+                assertEquals(publish, null != contentParamsVO.getOnlinexml());
+            }
+        } catch (Exception e) {
+            this.deleteContents(newContentIds);
+            throw e;
+        }
+        return newContentIds;
+    }
+
+    private String getTestMarker(int index) {
+        return "Index " + index;
+    }
+
+    private ContentMetadata createMockMetadata(String marker) {
+        ContentMetadata metas = new ContentMetadata();
+        ApsProperties descriptions = new ApsProperties();
+        ApsProperties keywords = new ApsProperties();
+        metas.setComplexParameters(new HashMap<>());
+        String[] langs = {"it", "en"};
+        for (String langCode : langs) {
+            ObjectMetatag metatagDescr = new ObjectMetatag(langCode, ExtraConfigDOMUtil.DESCRIPTION_PROPERTY_NAME, "Description " + langCode + " " + marker);
+            descriptions.put(langCode, metatagDescr);
+            ObjectMetatag metatagKeywords = new ObjectMetatag(langCode, ExtraConfigDOMUtil.KEYWORDS_PROPERTY_NAME, "Keywords " + langCode + " " + marker);
+            keywords.put(langCode, metatagKeywords);
+            Map<String, ObjectMetatag> keyLang = new HashMap<>();
+            for (int i = 0; i < 5; i++) {
+                ObjectMetatag meta = new ObjectMetatag(langCode, "key" + i, "Meta " + langCode + " " + marker);
+                meta.setUseDefaultLangValue(i % 2 == 1);
+                keyLang.put("key" + i, meta);
+            }
+            metas.getComplexParameters().put(langCode, keyLang);
+        }
+        metas.setDescriptions(descriptions);
+        metas.setKeywords(keywords);
+        return metas;
+    }
+
+    private void deleteContents(String[] contentIds) throws Throwable {
+        for (int i = 0; i < contentIds.length; i++) {
+            if (null == contentIds[i]) {
+                continue;
+            }
+            Content content = this.contentManager.loadContent(contentIds[i], false);
+            if (null != content) {
+                this.contentManager.removeOnLineContent(content);
+                this.contentManager.deleteContent(content);
+            }
+        }
+    }
 
 }
