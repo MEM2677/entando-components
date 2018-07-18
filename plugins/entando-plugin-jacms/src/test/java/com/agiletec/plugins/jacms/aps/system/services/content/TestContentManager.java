@@ -814,29 +814,10 @@ public class TestContentManager extends BaseTestCase {
         }
     }
 
-    public void testLoadPublicEvents_9_c() throws ApsSystemException {
-        this.testLoadPublicEvents_9_c(true);
-        this.testLoadPublicEvents_9_c(false);
-    }
+    public void testLoadWorkEvents_1_b() throws ApsSystemException {
+        //forcing case insensitive search
+        WorkContentSearcherDAO searcherDao = (WorkContentSearcherDAO) this.getApplicationContext().getBean("jacmsWorkContentSearcherDAO");
 
-    protected void testLoadPublicEvents_9_c(boolean useRoleFilter) throws ApsSystemException {
-        List<String> groups = new ArrayList<String>();
-        groups.add(Group.ADMINS_GROUP_NAME);
-        EntitySearchFilter filter = (useRoleFilter)
-                ? EntitySearchFilter.createRoleFilter(JacmsSystemConstants.ATTRIBUTE_ROLE_TITLE, "LE", true)
-                : new EntitySearchFilter("Titolo", true, "LE", true);
-        filter.setLangCode("it");
-        filter.setOrder(EntitySearchFilter.DESC_ORDER);
-        EntitySearchFilter[] filters = {filter};
-        List<String> contents = this._contentManager.loadPublicContentsId("EVN", null, filters, groups);
-        String[] expectedOrderedContentsId2 = {"EVN25", "EVN21", "EVN23"};
-        assertEquals(expectedOrderedContentsId2.length, contents.size());
-        for (int i = 0; i < expectedOrderedContentsId2.length; i++) {
-            assertEquals(expectedOrderedContentsId2[i], contents.get(i));
-        }
-    }
-
-    public void testLoadWorkEvents_1() throws ApsSystemException {
         List<String> groups = new ArrayList<String>();
         groups.add(Group.ADMINS_GROUP_NAME);
         List<String> allowedDescription = new ArrayList<String>();
@@ -904,6 +885,7 @@ public class TestContentManager extends BaseTestCase {
         EntitySearchFilter filterForDate = new EntitySearchFilter("DataInizio", true);
         filterForDate.setOrder(EntitySearchFilter.DESC_ORDER);
         EntitySearchFilter[] filters = {filterForCreation, filterForDate};
+
         List<String> contents = _contentManager.loadPublicContentsId("EVN", null, filters, null);
         String[] expectedFreeOrderedContentsId = {"EVN21", "EVN25", "EVN24", "EVN23",
             "EVN20", "EVN194", "EVN193", "EVN192", "EVN191"};
@@ -911,7 +893,9 @@ public class TestContentManager extends BaseTestCase {
         for (int i = 0; i < expectedFreeOrderedContentsId.length; i++) {
             assertEquals(expectedFreeOrderedContentsId[i], contents.get(i));
         }
+
         EntitySearchFilter[] filters2 = {filterForDate, filterForCreation};
+
         List<String> contents2 = _contentManager.loadPublicContentsId("EVN", null, filters2, null);
         String[] expectedFreeOrderedContentsId2 = {"EVN194", "EVN193", "EVN24",
             "EVN23", "EVN25", "EVN20", "EVN21", "EVN192", "EVN191"};
@@ -982,7 +966,7 @@ public class TestContentManager extends BaseTestCase {
 
     public void testLoadFutureEvents_3() throws ApsSystemException {
         Date today = DateConverter.parseDate("2005-01-01", "yyyy-MM-dd");
-        List<String> groups = new ArrayList<>();
+        List<String> groups = new ArrayList<String>();
         groups.add("coach");
         EntitySearchFilter filter = new EntitySearchFilter("DataInizio", true, today, null);
         filter.setOrder(EntitySearchFilter.DESC_ORDER);
@@ -998,9 +982,11 @@ public class TestContentManager extends BaseTestCase {
 
     public void testLoadPastEvents_1() throws ApsSystemException {
         Date today = DateConverter.parseDate("2008-10-01", "yyyy-MM-dd");
+
         EntitySearchFilter filter = new EntitySearchFilter("DataInizio", true, null, today);
         filter.setOrder(EntitySearchFilter.ASC_ORDER);
         EntitySearchFilter[] filters = {filter};
+
         List<String> contents = _contentManager.loadPublicContentsId("EVN", null, filters, null);
         String[] expectedOrderedContentsId = {"EVN191", "EVN192",
             "EVN21", "EVN20", "EVN25", "EVN23"};
@@ -1012,9 +998,11 @@ public class TestContentManager extends BaseTestCase {
 
     public void testLoadPastEvents_2() throws ApsSystemException {
         Date today = DateConverter.parseDate("2008-10-01", "yyyy-MM-dd");
+
         EntitySearchFilter filter = new EntitySearchFilter("DataInizio", true, null, today);
         filter.setOrder(EntitySearchFilter.DESC_ORDER);
         EntitySearchFilter[] filters = {filter};
+
         List<String> contents = _contentManager.loadPublicContentsId("EVN", null, filters, null);
         String[] expectedOrderedContentsId = {"EVN23", "EVN25",
             "EVN20", "EVN21", "EVN192", "EVN191"};
@@ -1042,7 +1030,7 @@ public class TestContentManager extends BaseTestCase {
     }
 
     public void testLoadWorkContentsForCategory_1() throws ApsSystemException {
-        List<String> groups = new ArrayList<>();
+        List<String> groups = new ArrayList<String>();
         groups.add(Group.ADMINS_GROUP_NAME);
         String[] categories1 = {"general_cat1"};
         List<String> contents = this._contentManager.loadWorkContentsId(categories1, null, groups);
@@ -1052,7 +1040,9 @@ public class TestContentManager extends BaseTestCase {
         assertTrue(contents.contains("ART102"));
         assertTrue(contents.contains("ART111"));
         assertTrue(contents.contains("EVN192"));
+
         String[] categories2 = {"general_cat1", "general_cat2"};
+
         contents = this._contentManager.loadWorkContentsId(categories2, null, groups);
         assertEquals(2, contents.size());
         assertTrue(contents.contains("ART111"));
@@ -1060,7 +1050,7 @@ public class TestContentManager extends BaseTestCase {
     }
 
     public void testLoadWorkContentsForCategory_2() throws ApsSystemException {
-        List<String> groups = new ArrayList<>();
+        List<String> groups = new ArrayList<String>();
         groups.add(Group.ADMINS_GROUP_NAME);
         String[] categories1 = {"general_cat1"};
         EntitySearchFilter filter1 = new EntitySearchFilter(IContentManager.ENTITY_TYPE_CODE_FILTER_KEY, false, "ART", false);
@@ -1159,7 +1149,7 @@ public class TestContentManager extends BaseTestCase {
     }
 
     public void testLoadPublicEventsForCategory_2() throws ApsSystemException {
-        List<String> groups = new ArrayList<>();
+        List<String> groups = new ArrayList<String>();
         groups.add(Group.ADMINS_GROUP_NAME);
         String[] categories1 = {"general_cat1"};
         EntitySearchFilter filter1 = new EntitySearchFilter(IContentManager.ENTITY_TYPE_CODE_FILTER_KEY, false, "ART", false);
@@ -1247,7 +1237,7 @@ public class TestContentManager extends BaseTestCase {
     }
 
     public void testLoadWorkContentsByAttribute_1() throws ApsSystemException {
-        List<String> groups = new ArrayList<>();
+        List<String> groups = new ArrayList<String>();
         groups.add(Group.ADMINS_GROUP_NAME);
 
         EntitySearchFilter filter0 = new EntitySearchFilter(IContentManager.ENTITY_ID_FILTER_KEY, false);
@@ -1385,6 +1375,54 @@ public class TestContentManager extends BaseTestCase {
             throw t;
         } finally {
             this.deleteContents(newContentIds);
+        }
+    }
+
+    public void testGetLinkProperties() throws Throwable {
+        EntitySearchFilter creationOrder = new EntitySearchFilter(IContentManager.CONTENT_CREATION_DATE_FILTER_KEY, false);
+        creationOrder.setOrder(EntitySearchFilter.DESC_ORDER);
+        EntitySearchFilter typeFilter = new EntitySearchFilter(IContentManager.ENTITY_TYPE_CODE_FILTER_KEY, false, "ALL", false);
+        EntitySearchFilter[] filters = {creationOrder, typeFilter};
+        List<String> userGroups = new ArrayList<>();
+        userGroups.add(Group.ADMINS_GROUP_NAME);
+        List<String> contents = null;
+        try {
+
+            contents = this._contentManager.loadWorkContentsId(filters, userGroups);
+            assertEquals(1, contents.size());
+            Content content = this._contentManager.loadContent("ALL4", false);
+            assertEquals(Content.STATUS_PUBLIC, content.getStatus());
+            assertEquals(Group.FREE_GROUP_NAME, content.getMainGroup());
+            Map<String, AttributeInterface> attributes = content.getAttributeMap();
+            MonoListAttribute monoListAttribute10 = (MonoListAttribute) attributes.get("MonoLLink");
+            assertNotNull(monoListAttribute10);
+            assertEquals(2, monoListAttribute10.getAttributes().size());
+
+            LinkAttribute attributeToModify = (LinkAttribute) monoListAttribute10.getAttributes().get(0);
+            attributeToModify.getLinkProperties().put("key1", "value1");
+            attributeToModify.getLinkProperties().put("key2", "value2");
+
+            content.setId(null);
+            this._contentManager.saveContent(content);
+            String id = content.getId();
+
+            Content extractedContent = this._contentManager.loadContent(id, false);
+            attributes = extractedContent.getAttributeMap();
+            monoListAttribute10 = (MonoListAttribute) attributes.get("MonoLLink");
+            assertNotNull(monoListAttribute10);
+            assertEquals(2, monoListAttribute10.getAttributes().size());
+            LinkAttribute attributeModified = (LinkAttribute) monoListAttribute10.getAttributes().get(0);
+            assertEquals(2, attributeModified.getLinkProperties().size());
+            assertEquals("value1", attributeModified.getLinkProperties().get("key1"));
+            assertEquals("value2", attributeModified.getLinkProperties().get("key2"));
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            contents = this._contentManager.loadWorkContentsId(filters, userGroups);
+            if (contents.size() > 1) {
+                Content contentToDelete = this._contentManager.loadContent(contents.get(0), false);
+                this._contentManager.deleteContent(contentToDelete);
+            }
         }
     }
 
