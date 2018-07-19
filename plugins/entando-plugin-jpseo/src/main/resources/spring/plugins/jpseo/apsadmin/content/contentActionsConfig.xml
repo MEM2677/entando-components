@@ -10,6 +10,11 @@
 		<property name="seoMappingManager" ref="jpseoSeoMappingManager" />
 	</bean>
     
+    <bean id="jpseoContentActionAspect" scope="prototype" 
+          class="org.entando.entando.plugins.jpseo.apsadmin.content.ContentActionAspect">
+		<property name="contentActionHelper" ref="jacmsContentActionHelper"/>
+	</bean>
+    
     <bean id="jpseoEntryContentLangElementHookPoint" class="com.agiletec.apsadmin.system.plugin.HookPointElementContainer" >
 		<property name="filePath"><value>/WEB-INF/plugins/jpseo/apsadmin/jsp/content/entryContentLang-jack.jsp</value></property>
 		<property name="hookPointKey"><value>jacms.entryContent.langElement</value></property>
