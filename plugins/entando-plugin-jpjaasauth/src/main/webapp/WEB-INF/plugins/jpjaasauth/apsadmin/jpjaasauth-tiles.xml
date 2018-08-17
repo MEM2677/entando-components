@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+	"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+	"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+    <definition extends="layout.default" name="jpjaasauth.admin.Mapping.list">
+		<put-attribute name="title" value="jpjaasauth.title.mappingManagement" />
+		<put-attribute name="body" value="/WEB-INF/plugins/jpjaasauth/apsadmin/jsp/mapping/mapping-list.jsp" />
+		<put-attribute name="extraResources" value="/WEB-INF/plugins/jpjaasauth/apsadmin/jsp/common/layouts/assets-more/mapping-list-extras.jsp"/>
+	</definition>
+    <definition extends="layout.default" name="jpjaasauth.admin.Mapping.entry">
+		<put-attribute name="title" value="jpjaasauth.title.mappingManagement" />
+		<put-attribute name="body" value="/WEB-INF/plugins/jpjaasauth/apsadmin/jsp/mapping/mapping-entry.jsp" />
+		<put-attribute name="extraResources" value="/WEB-INF/plugins/jpjaasauth/apsadmin/jsp/common/layouts/assets-more/mapping-entry-extras.jsp"/>
+	</definition>
+    <definition extends="layout.default" name="jpjaasauth.admin.Mapping.trash">
+		<put-attribute name="title" value="jpjaasauth.title.mappingManagement" />
+		<put-attribute name="body" value="/WEB-INF/plugins/jpjaasauth/apsadmin/jsp/mapping/mapping-trash.jsp" />
+		<put-attribute name="extraResources" value="/WEB-INF/plugins/jpjaasauth/apsadmin/jsp/common/layouts/assets-more/mapping-trash-extras.jsp"/>
+	</definition>
+	
+	<definition extends="layout.default" name="jpjaasauth.admin.config.entry">
+		<put-attribute name="title" value="jpjaasauth.title.mappingManagement" />
+		<put-attribute name="extraResources" value="/WEB-INF/plugins/jpjaasauth/apsadmin/jsp/common/layouts/assets-more/mapping-trash-extras.jsp"/>
+		<put-attribute name="body" value="/WEB-INF/plugins/jpjaasauth/apsadmin/jsp/config/config.jsp" />
+	</definition>
+	<definition extends="layout.default" name="jpjaasauth.admin.config.ok">
+		<put-attribute name="title" value="jpjaasauth.title.mappingManagement" />
+		<put-attribute name="extraResources" value="/WEB-INF/plugins/jpjaasauth/apsadmin/jsp/common/layouts/assets-more/mapping-trash-extras.jsp"/>
+		<put-attribute name="body" value="/WEB-INF/plugins/jpjaasauth/apsadmin/jsp/config/config_ok.jsp" />
+	</definition>
+
+
+</tiles-definitions>
+
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	
+    <package name="jpjaasauth_do/jpjaasauth/Mapping" namespace="/do/jpjaasauth/Mapping" extends="entando-default">
+    	
+    	<action name="list" class="jpjaasauthMappingFinderAction">
+            <result type="tiles">jpjaasauth.admin.Mapping.list</result>
+        	<interceptor-ref name="entandoDefaultStack">
+        		<param name="chain.includeParameters">fieldErrors,actionErrors,actionMessages</param>
+        		<param name="requestAuth.requiredPermission">superuser</param>
+        	</interceptor-ref>
+        </action>
+        
+        <action name="search" class="jpjaasauthMappingFinderAction">
+            <result type="tiles">jpjaasauth.admin.Mapping.list</result>
+        	<interceptor-ref name="entandoDefaultStack"><param name="requestAuth.requiredPermission">superuser</param></interceptor-ref>
+        </action>
+    	
+        <action name="new" class="jpjaasauthMappingAction" method="newMapping">
+            <result type="tiles">jpjaasauth.admin.Mapping.entry</result>
+        	<interceptor-ref name="entandoDefaultStack"><param name="requestAuth.requiredPermission">superuser</param></interceptor-ref>
+        </action>
+    	
+    	<action name="edit" class="jpjaasauthMappingAction" method="edit">
+            <result type="tiles">jpjaasauth.admin.Mapping.entry</result>
+            <result name="input" type="redirectAction">list</result>
+        	<interceptor-ref name="entandoDefaultStack"><param name="requestAuth.requiredPermission">superuser</param></interceptor-ref>
+        </action>
+        
+    	<action name="save" class="jpjaasauthMappingAction" method="save">
+        	<result name="input" type="tiles">jpjaasauth.admin.Mapping.entry</result>
+        	<result type="redirectAction">list</result>
+        	<interceptor-ref name="entandoValidationStack"><param name="requestAuth.requiredPermission">superuser</param></interceptor-ref>
+        </action>
+        
+    	<action name="trash" class="jpjaasauthMappingAction" method="trash">
+            <result type="tiles">jpjaasauth.admin.Mapping.trash</result>
+        	<result name="input" type="redirectAction">list</result>
+        	<interceptor-ref name="entandoDefaultStack"><param name="requestAuth.requiredPermission">superuser</param></interceptor-ref>
+        </action>
+        
+    	<action name="delete" class="jpjaasauthMappingAction" method="delete">
+        	<result type="redirectAction">list</result>
+        	<interceptor-ref name="entandoDefaultStack"><param name="requestAuth.requiredPermission">superuser</param></interceptor-ref>
+        </action>
+    	
+    </package>
+   
+</struts>

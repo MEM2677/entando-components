@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+
+	<bean id="jpjaasauthMappingDAO" class="org.entando.entando.plugins.jpjaasauth.aps.system.services.mapping.MappingDAO">
+		<property name="dataSource" ref="servDataSource" />
+	</bean>
+
+	<bean id="jpjaasauthMappingManager" class="org.entando.entando.plugins.jpjaasauth.aps.system.services.mapping.MappingManager"
+		parent="abstractService">
+		<property name="mappingDAO" ref="jpjaasauthMappingDAO" />
+	</bean>
+	
+    <bean id="jpjaasauthMappingService" class="org.entando.entando.plugins.jpjaasauth.aps.system.services.mapping.MappingService" >
+        <property name="mappingManager" ref="jpjaasauthMappingManager" />
+    </bean>
+   
+	
+	<bean id="UserManager" 
+			class="org.entando.entando.plugins.jpjaasauth.aps.system.services.login.JAASUserManager"
+			parent="abstractService">
+		<property name="userDAO" ref="UserDAO" />
+        <property name="configManager" ref="BaseConfigManager"/>
+	</bean>
+	
+	<bean id="AuthenticationProviderManager" class="com.agiletec.aps.system.services.user.JAASAuthenticationProviderManager"
+          parent="abstractService" >
+        <property name="userManager" ref="UserManager" />
+        <property name="authorizationManager" ref="AuthorizationManager" />
+        <property name="tokenManager" ref="OAuth2TokenManager" />
+        <property name="mappingManager" ref="jpjaasauthMappingManager" />
+        <property name="groupManager" ref="GroupManager" />
+        <property name="roleManager" ref="RoleManager" />
+    </bean>
+    
+</beans>

@@ -1,0 +1,51 @@
+<apiMethodDefinitions>
+
+	<resource name="redirects">
+        <description>Return the redirect list</description>
+        <source pluginCode="jpredirect">plugins</source>
+		<method httpMethod="GET" active="true" canSpawnOthers="true">
+			<description>Return the redirects list</description>
+			<springBean name="jpredirectRedirectManager" method="getRedirectsForApi" />
+			<responseClass>org.entando.entando.plugins.jpredirect.aps.system.services.redirect.api.RedirectListResponse</responseClass>
+			<!-- 
+			<parameters>
+			</parameters>
+			-->
+		</method>
+	</resource>
+  
+    <resource name="redirect">
+        <description>The redirect</description>
+        <source pluginCode="jpredirect">plugins</source>
+        <method httpMethod="GET" active="true" canSpawnOthers="true">
+            <description>Return a redirect by id</description>
+            <springBean name="jpredirectRedirectManager" method="getRedirectForApi" />
+            <responseClass>org.entando.entando.plugins.jpredirect.aps.system.services.redirect.api.RedirectResponse</responseClass>
+            <parameters>
+                <parameter key="id" required="true">
+                    <description>The id of the redirect to return</description>
+                </parameter>
+            </parameters>
+        </method>
+        <method httpMethod="POST" active="true" requiredAuth="true" requiredPermission="superuser">
+            <description>Add a redirect</description>
+            <springBean name="jpredirectRedirectManager" method="addRedirectForApi" />
+            <expectedType>org.entando.entando.plugins.jpredirect.aps.system.services.redirect.api.JAXBRedirect</expectedType>
+        </method>
+        <method httpMethod="PUT" active="true" requiredAuth="true" requiredPermission="superuser">
+            <description>Update a redirect</description>
+            <springBean name="jpredirectRedirectManager" method="updateRedirectForApi" />
+            <expectedType>org.entando.entando.plugins.jpredirect.aps.system.services.redirect.api.JAXBRedirect</expectedType>
+        </method>
+        <method httpMethod="DELETE" active="true" requiredAuth="true" requiredPermission="superuser">
+            <description>Delete a redirect by id</description>
+            <springBean name="jpredirectRedirectManager" method="deleteRedirectForApi" />
+            <parameters>
+                <parameter key="id" required="true">
+                    <description>The id of the redirect to delete</description>
+                </parameter>
+            </parameters>
+        </method>
+    </resource>
+	
+</apiMethodDefinitions>

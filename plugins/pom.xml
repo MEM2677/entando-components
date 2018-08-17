@@ -74,6 +74,8 @@
         <module>entando-plugin-jpinfinispan</module>
 
         <module>entando-plugin-jpwebmail</module>
+		<module>entando-plugin-jpredirect</module>
+		<module>entando-plugin-jpjaasauth</module>
     </modules>
     <profiles>
         <profile>

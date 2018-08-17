@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+	"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+	"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+    <definition extends="layout.default" name="jpredirect.admin.Redirect.list">
+		<put-attribute name="title" value="jpredirect.title.redirectManagement" />
+		<put-attribute name="body" value="/WEB-INF/plugins/jpredirect/apsadmin/jsp/redirect/redirect-list.jsp" />
+		<put-attribute name="extraResources" value="/WEB-INF/plugins/jpredirect/apsadmin/jsp/common/layouts/assets-more/redirect-list-extras.jsp"/>
+	</definition>
+    <definition extends="layout.default" name="jpredirect.admin.Redirect.entry">
+		<put-attribute name="title" value="jpredirect.title.redirectManagement" />
+		<put-attribute name="body" value="/WEB-INF/plugins/jpredirect/apsadmin/jsp/redirect/redirect-entry.jsp" />
+		<put-attribute name="extraResources" value="/WEB-INF/plugins/jpredirect/apsadmin/jsp/common/layouts/assets-more/redirect-entry-extras.jsp"/>
+	</definition>
+    <definition extends="layout.default" name="jpredirect.admin.Redirect.trash">
+		<put-attribute name="title" value="jpredirect.title.redirectManagement" />
+		<put-attribute name="body" value="/WEB-INF/plugins/jpredirect/apsadmin/jsp/redirect/redirect-trash.jsp" />
+		<put-attribute name="extraResources" value="/WEB-INF/plugins/jpredirect/apsadmin/jsp/common/layouts/assets-more/redirect-trash-extras.jsp"/>
+	</definition>
+
+
+</tiles-definitions>
+
+

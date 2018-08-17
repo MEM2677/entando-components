@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	
+    <package name="jpredirect_do/jpredirect/Redirect" namespace="/do/jpredirect/Redirect" extends="entando-default">
+    	
+    	<action name="list" class="jpredirectRedirectFinderAction">
+            <result type="tiles">jpredirect.admin.Redirect.list</result>
+        	<interceptor-ref name="entandoDefaultStack">
+        		<param name="chain.includeParameters">fieldErrors,actionErrors,actionMessages</param>
+        		<param name="requestAuth.requiredPermission">superuser</param>
+        	</interceptor-ref>
+        </action>
+        
+        <action name="search" class="jpredirectRedirectFinderAction">
+            <result type="tiles">jpredirect.admin.Redirect.list</result>
+        	<interceptor-ref name="entandoDefaultStack"><param name="requestAuth.requiredPermission">superuser</param></interceptor-ref>
+        </action>
+    	
+        <action name="new" class="jpredirectRedirectAction" method="newRedirect">
+            <result type="tiles">jpredirect.admin.Redirect.entry</result>
+        	<interceptor-ref name="entandoDefaultStack"><param name="requestAuth.requiredPermission">superuser</param></interceptor-ref>
+        </action>
+    	
+    	<action name="edit" class="jpredirectRedirectAction" method="edit">
+            <result type="tiles">jpredirect.admin.Redirect.entry</result>
+            <result name="input" type="redirectAction">list</result>
+        	<interceptor-ref name="entandoDefaultStack"><param name="requestAuth.requiredPermission">superuser</param></interceptor-ref>
+        </action>
+        
+    	<action name="save" class="jpredirectRedirectAction" method="save">
+        	<result name="input" type="tiles">jpredirect.admin.Redirect.entry</result>
+        	<result type="redirectAction">list</result>
+        	<interceptor-ref name="entandoValidationStack"><param name="requestAuth.requiredPermission">superuser</param></interceptor-ref>
+        </action>
+        
+    	<action name="trash" class="jpredirectRedirectAction" method="trash">
+            <result type="tiles">jpredirect.admin.Redirect.trash</result>
+        	<result name="input" type="redirectAction">list</result>
+        	<interceptor-ref name="entandoDefaultStack"><param name="requestAuth.requiredPermission">superuser</param></interceptor-ref>
+        </action>
+        
+    	<action name="delete" class="jpredirectRedirectAction" method="delete">
+        	<result type="redirectAction">list</result>
+        	<interceptor-ref name="entandoDefaultStack"><param name="requestAuth.requiredPermission">superuser</param></interceptor-ref>
+        </action>
+    	
+    </package>
+   
+</struts>

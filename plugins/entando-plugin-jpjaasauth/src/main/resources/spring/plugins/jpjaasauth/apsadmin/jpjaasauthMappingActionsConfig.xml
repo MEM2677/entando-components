@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd" >
+
+
+	<bean id="jpjaasauthMappingPluginSubMenu" class="com.agiletec.apsadmin.system.plugin.PluginSubMenuContainer" >
+		<property name="subMenuFilePath"><value>/WEB-INF/plugins/jpjaasauth/apsadmin/jsp/common/layouts/subMenu.jsp</value></property>
+	</bean>
+
+	<bean id="jpjaasauthMappingFinderAction" scope="prototype" 
+			class="org.entando.entando.plugins.jpjaasauth.apsadmin.mapping.MappingFinderAction" 
+			parent="abstractBaseAction" >
+		<property name="mappingManager" ref="jpjaasauthMappingManager" />
+	</bean>
+
+	<bean id="jpjaasauthMappingAction" scope="prototype" 
+			class="org.entando.entando.plugins.jpjaasauth.apsadmin.mapping.MappingAction" 
+			parent="abstractBaseAction" >
+		<property name="mappingManager" ref="jpjaasauthMappingManager" />
+		<property name="groupManager" ref="GroupManager" />
+        <property name="roleManager" ref="RoleManager" />
+	</bean>
+	
+	
+	<bean id="jpjaasauthConfigAction" scope="prototype" 
+			class="org.entando.entando.plugins.jpjaasauth.apsadmin.config.ConfigAction" 
+			parent="abstractBaseAction" >
+		<property name="userManager" ref="UserManager" />
+	</bean>
+
+
+
+
+ 	
+</beans>
